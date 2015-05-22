@@ -31,10 +31,10 @@
 // number of columns of bricks
 #define COLS 10
 
-    // the Edges of the bricks x and y
-    #define EDG_B 6
-    #define EDG_Y 75
-    #define B_HEIGHT 15
+// the Edges of the bricks x and y
+#define EDG_B 6
+#define EDG_Y 75
+#define B_HEIGHT 15
 
 // radius of ball in pixels
 #define RADIUS 10
@@ -70,8 +70,10 @@ int main(void)
     
     // initial velocity for x and y
     double YVel = VEL;
+    
+    // use drand48 to shoot the ball to either side
     double XVel = drand48();
-    if(XVel >= .5) 
+    if (XVel >= .5) 
         XVel = XVel * VEL;
     else 
         XVel = XVel * -VEL;
@@ -81,7 +83,7 @@ int main(void)
 
     // instantiate scoreboard, centered in middle of window, just above ball
     GLabel label = initScoreboard(window);
-
+    
     // number of bricks initially
     int bricks = COLS * ROWS;
 
@@ -90,7 +92,10 @@ int main(void)
 
     // number of points initially
     int points = 0;
-
+    
+    // Detect if mouse is clicked to start the round.
+    bool gameStarted = false;
+    
     // keep playing until game over
     while (lives > 0 && bricks > 0)
     {   
@@ -107,12 +112,20 @@ int main(void)
             // if event is movement
             if (getEventType(mouseMoved) == MOUSE_MOVED)
             {
+                // move paddle from center along y axis
                 double xPadMove = getX(mouseMoved) - getWidth(paddle) / 2;
                 setLocation(paddle, xPadMove, yPadMove);
             }
+            
+            // if event is Mouse click
+            if (getEventType(mouseMoved) == MOUSE_CLICKED)
+            {   
+                // give permision for the ball to move
+                gameStarted = true;
+            }
         }
         
-        //detect collsion with object
+        // detect collsion with object
         GObject object = detectCollision(window, ball);
         
         // If the ball touched an object
@@ -121,28 +134,45 @@ int main(void)
             // if we hit paddle change velocity
             if ( object == paddle )
             {
-                YVel = -YVel;
+                if (YVel > 0)
+                    YVel = -YVel;
             }
         
-            // if hit breick, disapear brick
+            // if hit brick, disapear brick and bounce
             else if (strcmp(getType(object), "GRect") == 0)
             {
+                // bounce off brick
                 YVel = -YVel;
-                removeGWindow(window, object);   
+                // remove the brick
+                removeGWindow(window, object);
+                // score points and get closer to game over
+                points++;
+                bricks--;
+                // update the scoreboard
+                updateScoreboard(window, label, points); 
             }
             
         }
         
         // disapear ball from bottom edge of windw and make new
         if (getY(ball) + getHeight(ball) >= HEIGHT)
-        {
+        {   
+            // remove ball and initiate new one
             removeGWindow(window, ball);
             ball = initBall(window);
+            
+            // substract one from lives
+            lives--;
+            
+            // set new random velocity for X 
             XVel = drand48();
-            if(XVel >= .5) 
+            if (XVel >= .5) 
                 XVel = XVel * VEL;
             else 
                 XVel = XVel * -VEL;
+            
+            // Wait for click
+            gameStarted = false;
             
         }
 
@@ -164,8 +194,12 @@ int main(void)
             XVel = -XVel;
         }
         
-        // move circle along the Vels
-        move(ball, XVel, YVel);
+        // if mouse has not been clicked don't move
+        if (gameStarted == true)
+        {
+            // move circle along the Vels
+            move(ball, XVel, YVel);
+        }
         
         // linger before moving again
         pause(5);
@@ -187,20 +221,20 @@ void initBricks(GWindow window)
     // Make sure brick position right
     int xPos = 0;
     int yPos = EDG_Y;
-    int BWidth = (WIDTH -(EDG_B * (COLS + 1)))/COLS;    
+    int BWidth = (WIDTH - (EDG_B * (COLS + 1))) / COLS;    
     
-    //the loops that will make the actal rectangles
+    // the loops that will make the actal rectangles
     // change row when you got a line with all columns
     for(int rows = 0; rows < ROWS; rows++)
     {
-        //change color of each row
+        // change color of each row
         char* color = colorChanger(rows);
         
         // change column every time a rectangle is generated
         for(int cols = 0; cols < COLS; cols++)
         {
             // move x position so edges don't touch
-            xPos+=EDG_B;
+            xPos += EDG_B;
             
             // initialize blocks
             GRect* brick = newGRect(xPos, yPos, BWidth, B_HEIGHT);
@@ -230,10 +264,11 @@ void initBricks(GWindow window)
  */
 GOval initBall(GWindow window)
 {
-    // TODO
-    int xBall = WIDTH/2 - RADIUS;
-    int yBall = HEIGHT/2 - RADIUS;
+    // initialize ball at the middle of the screen
+    int xBall = WIDTH / 2 - RADIUS;
+    int yBall = HEIGHT / 2 - RADIUS;
     GOval* ball = newGOval(xBall, yBall, RADIUS * 2, RADIUS * 2);
+    // set black and filled
     setColor(ball, "BLACK");
     setFilled(ball, true);
     add(window, ball);
@@ -247,7 +282,7 @@ GOval initBall(GWindow window)
 GRect initPaddle(GWindow window)
 {
     // paddle Position Coordinates
-    int xPaddle = (WIDTH/2) - (P_WIDTH/2);
+    int xPaddle = (WIDTH - P_WIDTH) / 2;
     int yPaddle = (HEIGHT * 7) / 8;
     GRect* paddle = newGRect(xPaddle, yPaddle, P_WIDTH, P_HEIGHT);
     setColor(paddle, "BLACK");
@@ -262,8 +297,14 @@ GRect initPaddle(GWindow window)
  */
 GLabel initScoreboard(GWindow window)
 {
-    // TODO
-    return NULL;
+    GLabel score = newGLabel("0");
+    setColor(score, "GRAY");
+    int xLabel = (WIDTH - getWidth(score)) / 2;
+    int yLabel = (HEIGHT / 2) - 30;
+    setFont(score, "SansSerif-23");
+    setLocation(score, xLabel, yLabel);
+    add(window, score);
+    return score;
 }
 
 /**
@@ -330,15 +371,23 @@ GObject detectCollision(GWindow window, GOval ball)
 }
 
 // Changes colors of bricks depending on the row
-    char* colorChanger(int row)
-    {
-        // check the Modus of each row divided by six, assign value
-        if(row % 6 == 0) return "RED";
-        if(row % 6 == 1) return "BLUE";
-        if(row % 6 == 2) return "YELLOW";
-        if(row % 6 == 3) return "MAGENTA";
-        if(row % 6 == 4) return "GREEN";
-        if(row % 6 == 5) return "ORANGE";
-        else return NULL;
+char* colorChanger(int row)
+{
+    // check the Modus of each row divided by six, assign color value
+    if (row % 6 == 0) 
+        return "RED";
+    if (row % 6 == 1) 
+        return "BLUE";
+    if (row % 6 == 2) 
+        return "YELLOW";
+    if (row % 6 == 3) 
+        return "MAGENTA";
+    if (row % 6 == 4) 
+        return "GREEN";
+    if (row % 6 == 5) 
+        return "ORANGE";
+    // just in case
+    else 
+        return NULL;
     
     }

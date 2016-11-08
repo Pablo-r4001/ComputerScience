@@ -1,0 +1,36 @@
+0.  BMP:  Over 4 billion or 32 bits
+    JPEG: 16,777,216 or 24 bits
+    GIF:  internal reference pallette of 256 from the 16,777,216 supported 
+         or 8bits referencing from a 24 bit pallette.
+    PNG:  16,777,216 or 24 bits
+1.  GIF
+2.  Lossy compression is when the original data of the file can't be recovered completely
+    Lossless compression is when the original data of the file can be recovered completely.
+3.  JPEG
+4.  1.- The first character on the filename is changed on the directory entry
+        which is in a linked list of file and directory entries.
+    2.- The 512 bit FAT clusters corresponding to the file data are moved to the drive's list
+        of free clusters.
+5.  1.- A slack space sanitizer can be used to ovverwrite blocks that contained 
+        temporary and deleted, retained data blocks, and vendor-hidden data
+        reading data from overwritten files is said to beakin to UFO experiences and, 
+        since there is usable data that overrides the deleted clusters, these sanitizers
+        don't bother.
+6.  It defines standard integer types with determined different lengths
+7.  The lengths for the int types is standard and also the types contain
+    specific macros to apply them.
+8.  The number of bytes for the types are:
+    BYTE: 8 bits.
+    DWORD: 32 bits.
+    LONG: 32 bits.
+    WORD: 16 bits.
+9.  The first two characters in a bitmap must be BM 0x4D42
+10. bfSize
+11. TODO
+12. TODO
+13. TODO
+14. TODO
+15. TODO
+16. TODO
+17. TODO
+18. Rick Astley Dun it

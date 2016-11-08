@@ -21,13 +21,10 @@ int main(int argc, string argv[])
     string key = argv[1];
     do
     {
-        if ( key[kcheck] > 64 && key[kcheck] <= 90)
+        if ((key[kcheck] > 64 && key[kcheck] <= 90) 
+        || (key[kcheck] > 96 && key[kcheck] <= 122))
         {
             kcheck++;  
-        }
-        else if( key[kcheck] > 96 && key[kcheck] <= 122)
-        {
-            kcheck++;
         }
         else
         {

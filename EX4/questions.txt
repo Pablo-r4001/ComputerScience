@@ -25,12 +25,17 @@
     LONG: 32 bits.
     WORD: 16 bits.
 9.  The first two characters in a bitmap must be BM 0x4D42
-10. bfSize
-11. TODO
-12. TODO
-13. TODO
-14. TODO
-15. TODO
-16. TODO
-17. TODO
+10. bfSize is the size of the file, biSize is the size of the BiTMAPINFOHEADER and is constant
+11. If biHeight it's negative, the bitmap is read from the top down from the upper left corner
+    if it's positive it's read from the upper left corner
+12. The field that specifies the depth of color is biBitCount
+13. The file doesn't exist or is inaccesible
+14. Because the nmemb argument is the number of pieces of code of the size of second argument size
+    wer're always writing a single piece of code of that size
+15. three because we have three RGBTRIPLES size three and we need to begin in a pointer starting with four
+    so we need three bytes to go from 9 to 12.
+16. fseek looks for a position in the buffer which is the first argument FILE. the second argument is the offset
+    and can be positive to go forward or negative to go backwards the third argument is weather we start from the
+    current position in the file, the begining or the end
+17. SEEK_CUR looks for the current position when readin ga file.
 18. Rick Astley Dun it

@@ -8,4 +8,6 @@ Computer Science course (The one on the resume)
 
 2nd Excercise is about the implementation of basic cryptographic algorithms. in EX2
 
-3rd Excercise is about the implementation of a GUI from an API, as well as sorting and search algorithms.
+3rd Excercise is about the implementation of a GUI from an API, as well as sorting and search algorithms. in EX3
+
+4th Ecercise is the implementation of a resize algorithm for BMP files as well as the recuperation of JPG files from corrupted FAT memory. in EX4

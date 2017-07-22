@@ -41,3 +41,14 @@ bool unload(void)
     // TODO
     return false;
 }
+
+/**
+ * djb2 hash function taken from http://www.cs.dartmouth.edu/~campbell/cs50/hash.c
+ */
+unsigned long hash(char* str) {
+  unsigned long hash = 5381;
+  int c;
+  while ((c = *str++) != 0)
+    hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+  return hash;
+}

@@ -31,4 +31,9 @@ unsigned int size(void);
  */
 bool unload(void);
 
+/**
+ * Hash Function declaration.
+ */
+unsigned long hash(char* str);
+
 #endif // DICTIONARY_H
